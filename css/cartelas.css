@@ -3,81 +3,207 @@
   margin: 0;
 }
 
+:root {
+  --fundo: #eef1f5;
+  --superficie: #ffffff;
+  --texto: #14202f;
+  --texto-suave: #55657a;
+  --borda: #cfd7e2;
+  --primaria: #0f1b2d;
+  --impressao: #c1272d;
+  --foco: #1565c0;
+  --cor-b: #1565c0;
+  --cor-i: #c62828;
+  --cor-n: #455a64;
+  --cor-g: #2e7d32;
+  --cor-o: #e65100;
+  --altura-cartela: 134mm;
+  --altura-letras: 14mm;
+  --fonte-titulo: 7mm;
+  --fonte-subtitulo: 4.4mm;
+  --fonte-letras: 10.5mm;
+  --fonte-numero: 12.5mm;
+  --fonte-rodape: 5.6mm;
+  --espaco-da-grade: 1.4mm;
+  --borda-da-casa: 0.7mm;
+  --escala-da-previa: 1;
+}
+
+body.uma-por-folha {
+  --altura-cartela: 281mm;
+  --altura-letras: 28mm;
+  --fonte-titulo: 12mm;
+  --fonte-subtitulo: 7mm;
+  --fonte-letras: 21mm;
+  --fonte-numero: 24mm;
+  --fonte-rodape: 9mm;
+  --espaco-da-grade: 2.4mm;
+  --borda-da-casa: 1.1mm;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background: #d9dde3;
-  color: #000000;
+  background: var(--fundo);
+  color: var(--texto);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
-.controles {
+.topo {
   display: flex;
   flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 14px;
-  max-width: 900px;
-  margin: 16px auto;
-  padding: 16px 20px;
-  border-radius: 10px;
-  background: #ffffff;
-  font-size: 16px;
+  align-items: center;
+  gap: 8px 20px;
+  padding: 14px 20px;
+  background: var(--primaria);
+  color: #ffffff;
 }
 
-.controles label {
+.topo h1 {
+  font-size: 20px;
+}
+
+.voltar {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.voltar:hover {
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.conteudo {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 12px 48px;
+}
+
+.configuracao {
+  padding: 20px;
+  border-radius: 14px;
+  background: var(--superficie);
+  box-shadow: 0 2px 10px rgba(15, 27, 45, 0.12);
+}
+
+.campos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.campo-largo {
+  grid-column: 1 / -1;
+}
+
+.configuracao label {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.configuracao label small {
+  color: var(--texto-suave);
+  font-weight: 400;
+}
+
+.configuracao input[type="text"],
+.configuracao input[type="number"],
+.configuracao select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 2px solid var(--borda);
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--texto);
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.configuracao input:focus-visible,
+.configuracao select:focus-visible,
+.botao-impressao:focus-visible,
+.voltar:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 2px;
+}
+
+.configuracao .opcao {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
   font-weight: 600;
 }
 
-.controles input,
-.controles select {
-  padding: 8px 10px;
-  border: 1px solid #999999;
-  border-radius: 6px;
-  font: inherit;
+.configuracao .opcao input {
+  width: 22px;
+  height: 22px;
 }
 
-.controles input[type="text"] {
-  width: 320px;
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-top: 20px;
 }
 
-.controles input[type="number"] {
-  width: 110px;
+.resumo {
+  color: var(--texto-suave);
+  font-size: 15px;
+  font-weight: 600;
 }
 
-.controles button,
-.botao-secundario {
-  padding: 10px 18px;
+.botao-impressao {
+  min-height: 50px;
+  padding: 12px 28px;
   border: 0;
-  border-radius: 6px;
-  background: #0f1b2d;
+  border-radius: 12px;
+  background: var(--impressao);
   color: #ffffff;
   font: inherit;
+  font-size: 17px;
   font-weight: 700;
-  text-decoration: none;
   cursor: pointer;
 }
 
-.controles .botao-secundario {
-  background: #e6e9ee;
-  color: #0f1b2d;
-}
-
-.controles .botao-impressao {
-  background: #c1272d;
+.botao-impressao:hover {
+  filter: brightness(1.1);
 }
 
 .aviso {
-  flex-basis: 100%;
-  color: #444444;
+  margin-top: 18px;
+  padding: 10px 14px;
+  border-left: 4px solid var(--borda);
+  color: var(--texto-suave);
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 1.5;
+}
+
+.previa-titulo {
+  margin: 28px 0 8px;
+  color: var(--texto-suave);
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .folha {
@@ -86,11 +212,12 @@ body {
   justify-content: space-between;
   width: 210mm;
   height: 296mm;
-  margin: 10px auto;
+  margin: 12px auto;
   padding: 8mm 14mm;
   overflow: hidden;
   background: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 12px rgba(15, 27, 45, 0.25);
+  zoom: var(--escala-da-previa);
   break-after: page;
 }
 
@@ -100,30 +227,42 @@ body {
 
 .corte {
   border: 0;
-  border-top: 0.4mm dashed #888888;
+  border-top: 0.4mm dashed #8a8a8a;
 }
 
 .cartela {
   display: flex;
   flex-direction: column;
-  height: 134mm;
+  height: var(--altura-cartela);
   padding: 4mm;
-  border: 1.2mm solid #000000;
+  border: 1mm solid #111111;
+  border-radius: 3mm;
+}
+
+.cartela-cabecalho {
+  margin-bottom: 2mm;
+  text-align: center;
 }
 
 .titulo {
-  margin-bottom: 2mm;
-  font-size: 6.5mm;
+  font-size: var(--fonte-titulo);
   font-weight: 700;
-  text-align: center;
+  line-height: 1.15;
+}
+
+.subtitulo {
+  margin-top: 0.8mm;
+  color: #444444;
+  font-size: var(--fonte-subtitulo);
 }
 
 .grade {
   display: grid;
   flex: 1;
-  grid-template-columns: repeat(5, 1fr);
-  grid-template-rows: 15mm repeat(5, 1fr);
-  gap: 1.2mm;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: var(--altura-letras) repeat(5, minmax(0, 1fr));
+  gap: var(--espaco-da-grade);
+  min-height: 0;
 }
 
 .letra,
@@ -135,63 +274,86 @@ body {
 }
 
 .letra {
-  background: #000000;
+  background: var(--cor-da-letra, #111111);
   color: #ffffff;
-  font-size: 11mm;
+  font-size: var(--fonte-letras);
   font-weight: 900;
 }
 
+.letra[data-letra="B"] { --cor-da-letra: var(--cor-b); }
+.letra[data-letra="I"] { --cor-da-letra: var(--cor-i); }
+.letra[data-letra="N"] { --cor-da-letra: var(--cor-n); }
+.letra[data-letra="G"] { --cor-da-letra: var(--cor-g); }
+.letra[data-letra="O"] { --cor-da-letra: var(--cor-o); }
+
+body.preto-e-branco .letra {
+  background: #111111;
+}
+
 .casa {
-  border: 0.8mm solid #000000;
-  font-size: 13mm;
+  border: var(--borda-da-casa) solid #111111;
+  font-size: var(--fonte-numero);
   font-weight: 800;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
 .casa.livre {
-  background: #e3e3e3;
-  font-size: 6mm;
+  flex-direction: column;
+  gap: 0.4mm;
+  background: #e8e8e8;
 }
 
-.rodape {
-  margin-top: 2mm;
-  font-size: 8mm;
+.livre-estrela {
+  font-size: calc(var(--fonte-numero) * 0.55);
+  line-height: 1;
+}
+
+.livre-texto {
+  font-size: calc(var(--fonte-numero) * 0.26);
+  letter-spacing: 0.08em;
+}
+
+.cartela-rodape {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4mm;
+  margin-top: 2.4mm;
+  font-size: var(--fonte-rodape);
   font-weight: 700;
-  text-align: center;
 }
 
-.uma-por-folha .cartela {
-  height: 280mm;
-  padding: 6mm;
+.campo-nome {
+  display: flex;
+  flex: 1;
+  align-items: baseline;
+  gap: 2mm;
+  font-weight: 400;
 }
 
-.uma-por-folha .titulo {
-  margin-bottom: 4mm;
-  font-size: 10mm;
+.campo-nome::after {
+  flex: 1;
+  border-bottom: 0.4mm solid #111111;
+  content: "";
 }
 
-.uma-por-folha .grade {
-  grid-template-rows: 28mm repeat(5, 1fr);
-  gap: 2.5mm;
-}
+@media (max-width: 560px) {
+  .topo {
+    padding: 12px 14px;
+  }
 
-.uma-por-folha .letra {
-  font-size: 22mm;
-}
+  .configuracao {
+    padding: 16px;
+  }
 
-.uma-por-folha .casa {
-  border-width: 1.2mm;
-  font-size: 32mm;
-}
+  .botao-impressao {
+    width: 100%;
+  }
 
-.uma-por-folha .casa.livre {
-  font-size: 12mm;
-}
-
-.uma-por-folha .rodape {
-  margin-top: 4mm;
-  font-size: 14mm;
+  .resumo {
+    width: 100%;
+  }
 }
 
 @media print {
@@ -199,12 +361,20 @@ body {
     background: #ffffff;
   }
 
-  .controles {
+  .topo,
+  .configuracao,
+  .previa-titulo {
     display: none;
+  }
+
+  .conteudo {
+    max-width: none;
+    padding: 0;
   }
 
   .folha {
     margin: 0;
     box-shadow: none;
+    zoom: 1;
   }
 }

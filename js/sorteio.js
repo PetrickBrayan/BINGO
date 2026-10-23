@@ -38,6 +38,8 @@
     conferencia: document.getElementById('conferencia'),
     campoDaConferencia: document.getElementById('campo-conferencia'),
     resultadoDaConferencia: document.getElementById('resultado-conferencia'),
+    botaoConferir: document.getElementById('botao-conferir'),
+    botaoFechar: document.getElementById('botao-fechar'),
   };
 
   const armazenamento = {
@@ -134,17 +136,19 @@
 
   function montarPainel() {
     LETRAS.forEach((letra, linha) => {
-      const rotulo = criarElemento('div', 'painel-letra', letra);
-      rotulo.dataset.letra = letra;
-      tela.painel.append(rotulo);
+      const faixa = criarElemento('div', 'painel-faixa');
+      faixa.dataset.letra = letra;
+      faixa.append(criarElemento('div', 'painel-letra', letra));
 
       for (let posicao = 1; posicao <= NUMEROS_POR_LETRA; posicao++) {
         const numero = linha * NUMEROS_POR_LETRA + posicao;
         const celula = criarElemento('div', 'painel-numero', String(numero));
         celula.dataset.letra = letra;
         celula.dataset.numero = String(numero);
-        tela.painel.append(celula);
+        faixa.append(celula);
       }
+
+      tela.painel.append(faixa);
     });
   }
 
@@ -152,6 +156,7 @@
     tela.painel.querySelectorAll('.painel-numero').forEach((celula) => {
       const numero = Number(celula.dataset.numero);
       celula.classList.toggle('sorteado', foiSorteado(numero));
+      celula.classList.toggle('ultimo', numero === ultimoSorteado());
       celula.classList.toggle('novo', numero === numeroNovo);
     });
   }
@@ -182,9 +187,19 @@
     exibirBolaEmRepouso();
   }
 
+  function montarBolinhaAnterior(numero) {
+    const bolinha = criarElemento('li');
+    bolinha.dataset.letra = letraDoNumero(numero);
+    bolinha.append(
+      criarElemento('span', 'anterior-letra', letraDoNumero(numero)),
+      criarElemento('span', 'anterior-numero', String(numero))
+    );
+    return bolinha;
+  }
+
   function atualizarAnteriores() {
     const anteriores = estado.sorteados.slice(-(ANTERIORES_EXIBIDOS + 1), -1).reverse();
-    tela.anteriores.replaceChildren(...anteriores.map((numero) => criarElemento('li', '', String(numero))));
+    tela.anteriores.replaceChildren(...anteriores.map(montarBolinhaAnterior));
   }
 
   function atualizarContador() {
@@ -612,6 +627,9 @@
 
       manterTelaAcesa();
     });
+
+    tela.botaoConferir.addEventListener('click', executarConferencia);
+    tela.botaoFechar.addEventListener('click', fecharConferencia);
 
     tela.conferencia.addEventListener('click', (evento) => {
       if (evento.target === tela.conferencia) {

@@ -4,7 +4,8 @@
   --destaque: #ffc83d;
   --sobre-destaque: #0f1b2d;
   --apagado: #22334d;
-  --texto-apagado: #8fa1bd;
+  --anel: #1b2b44;
+  --texto-apagado: #93a5c0;
   --superficie: #16263d;
   --sucesso: #5be08a;
   --erro: #ff7b7b;
@@ -23,6 +24,7 @@ body.claro {
   --destaque: #c1272d;
   --sobre-destaque: #ffffff;
   --apagado: #ebe6d8;
+  --anel: #e2dccb;
   --texto-apagado: #6f6959;
   --superficie: #ffffff;
   --sucesso: #127a3a;
@@ -45,18 +47,21 @@ body.claro {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
-html,
-body {
+html {
   height: 100%;
 }
 
 body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
   background: var(--fundo);
   color: var(--texto);
-  font-family: "Segoe UI", system-ui, Arial, sans-serif;
-  overflow: hidden;
+  font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
 }
 
 body:not(.comandos-visiveis) {
@@ -65,31 +70,37 @@ body:not(.comandos-visiveis) {
 
 .tela {
   display: grid;
-  grid-template-columns: 1fr 1.6fr;
-  height: 100vh;
-  padding: 3vh 2.5vw;
+  flex: 1;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.75fr);
   gap: 2.5vw;
+  min-height: 0;
+  padding: 3vh 2.5vw 1vh;
 }
 
 .coluna-da-bola {
+  container-type: inline-size;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4vh;
+  gap: 3.5vh;
+  min-width: 0;
 }
 
 .bola {
+  container-type: inline-size;
   display: flex;
+  flex: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: min(34vw, 62vh);
+  gap: 1cqw;
+  width: min(94cqw, 58vh);
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--destaque);
   color: var(--sobre-destaque);
-  box-shadow: 0 0 0 1.2vh var(--apagado);
+  box-shadow: 0 0 0 2cqw var(--anel);
 }
 
 .bola[data-letra] {
@@ -111,21 +122,21 @@ body:not(.comandos-visiveis) {
 }
 
 .bola-letra {
-  font-size: min(6.5vw, 11vh);
+  font-size: 19cqw;
   font-weight: 800;
   line-height: 1;
   letter-spacing: 0.05em;
 }
 
 .bola-numero {
-  font-size: min(16.5vw, 30vh);
+  font-size: 54cqw;
   font-weight: 900;
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
 .bola-repouso {
-  font-size: min(7vw, 12vh);
+  font-size: 22cqw;
   font-weight: 900;
   letter-spacing: 0.06em;
 }
@@ -133,38 +144,57 @@ body:not(.comandos-visiveis) {
 .anteriores {
   display: flex;
   align-items: center;
-  gap: 1.2vw;
-  min-height: 7vw;
+  justify-content: center;
+  gap: 2.5cqw;
+  min-height: 17cqw;
   list-style: none;
 }
 
 .anteriores li {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: min(6vw, 10vh);
+  width: min(17cqw, 10vh);
   aspect-ratio: 1;
+  border: 0.7cqw solid var(--cor);
   border-radius: 50%;
   background: var(--apagado);
-  color: var(--texto);
-  font-size: min(2.8vw, 4.6vh);
+  line-height: 1;
+}
+
+.anterior-letra {
+  color: var(--cor);
+  font-size: 4.2cqw;
+  font-weight: 900;
+}
+
+.anterior-numero {
+  font-size: 7.4cqw;
   font-weight: 800;
 }
 
 .contador {
   min-height: 1.2em;
   color: var(--texto-apagado);
-  font-size: min(1.9vw, 3.2vh);
+  font-size: max(16px, 5cqw);
   font-weight: 600;
+  text-align: center;
 }
 
 .painel {
+  container-type: inline-size;
+  display: grid;
+  grid-template-rows: repeat(5, 1fr);
+  align-self: center;
+  gap: 0.9vh;
+  height: min(100%, 70vh);
+}
+
+.painel-faixa {
   display: grid;
   grid-template-columns: 1.1fr repeat(15, 1fr);
-  grid-template-rows: repeat(5, 1fr);
-  gap: 0.7vh 0.35vw;
-  align-self: center;
-  height: min(72vh, 100%);
+  gap: 0 0.3cqw;
 }
 
 .painel-letra,
@@ -172,21 +202,21 @@ body:not(.comandos-visiveis) {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.8vh;
+  border-radius: 0.7cqw;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
 
 .painel-letra {
   color: var(--cor);
-  font-size: min(3.4vw, 6.4vh);
+  font-size: 5.6cqw;
   font-weight: 900;
 }
 
 .painel-numero {
   background: var(--apagado);
   color: var(--texto-apagado);
-  font-size: calc(min(2.2vw, 4.6vh) * var(--escala-painel));
+  font-size: calc(4cqw * var(--escala-painel));
 }
 
 .painel-numero.sorteado {
@@ -195,24 +225,35 @@ body:not(.comandos-visiveis) {
   font-weight: 900;
 }
 
+.painel-numero.ultimo {
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 0 0.5cqw var(--texto);
+  transform: scale(1.06);
+}
+
 .painel-numero.novo {
   animation: destacar 1.2s ease-out 2;
 }
 
+.rodape {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 9vh;
+  padding: 0 2.5vw 1.5vh;
+}
+
 .comandos {
-  position: fixed;
-  bottom: 1.5vh;
-  left: 50%;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 0.6vw;
-  max-width: 96vw;
   padding: 0.8vh 0.8vw;
-  transform: translateX(-50%);
   border-radius: 1.2vh;
   background: var(--superficie);
-  box-shadow: 0 0.5vh 2vh rgba(0, 0, 0, 0.45);
+  box-shadow: 0 0.4vh 1.6vh rgba(0, 0, 0, 0.35);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s;
@@ -225,14 +266,15 @@ body.comandos-visiveis .comandos {
 
 .comandos button,
 .comandos a {
-  display: inline-block;
-  padding: 0.8vh 1vw;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.8vh 0.9vw;
   border: 0;
   border-radius: 0.8vh;
   background: var(--apagado);
   color: var(--texto);
   font: inherit;
-  font-size: max(14px, 1.2vw);
+  font-size: max(13px, 0.95vw);
   font-weight: 600;
   text-decoration: none;
   cursor: pointer;
@@ -248,6 +290,29 @@ body.comandos-visiveis .comandos {
   filter: brightness(1.15);
 }
 
+.comandos button:focus-visible,
+.comandos a:focus-visible,
+.caixa button:focus-visible {
+  outline: 3px solid var(--destaque);
+  outline-offset: 2px;
+}
+
+kbd {
+  margin-left: 0.55em;
+  padding: 0.1em 0.45em;
+  border-radius: 0.35em;
+  background: var(--fundo);
+  color: var(--texto-apagado);
+  font: inherit;
+  font-size: 0.78em;
+  font-weight: 700;
+}
+
+.principal kbd {
+  background: rgba(0, 0, 0, 0.2);
+  color: inherit;
+}
+
 .sobreposicao {
   position: fixed;
   inset: 0;
@@ -255,6 +320,7 @@ body.comandos-visiveis .comandos {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px;
   background: rgba(0, 0, 0, 0.82);
 }
 
@@ -265,36 +331,37 @@ body.comandos-visiveis .comandos {
 .caixa {
   display: flex;
   flex-direction: column;
-  gap: 2.5vh;
-  width: min(70vw, 900px);
-  padding: 4vh 3vw;
-  border-radius: 2vh;
+  gap: clamp(12px, 2.5vh, 28px);
+  width: min(100%, 900px);
+  padding: clamp(18px, 4vh, 40px) clamp(18px, 3vw, 40px);
+  border-radius: 20px;
   background: var(--superficie);
   color: var(--texto);
 }
 
 .caixa h2 {
-  font-size: min(3vw, 5vh);
+  font-size: clamp(22px, 3vw, 44px);
 }
 
 .caixa input {
-  padding: 1.2vh 1.2vw;
-  border: 0.3vh solid var(--apagado);
-  border-radius: 1vh;
+  width: 100%;
+  padding: 12px 16px;
+  border: 3px solid var(--apagado);
+  border-radius: 12px;
   background: var(--fundo);
   color: var(--texto);
   font: inherit;
-  font-size: min(3vw, 5vh);
+  font-size: clamp(20px, 3vw, 44px);
 }
 
 .dica {
   color: var(--texto-apagado);
-  font-size: min(1.6vw, 2.8vh);
+  font-size: clamp(14px, 1.6vw, 24px);
 }
 
 .resultado {
   min-height: 1.3em;
-  font-size: min(3.4vw, 6vh);
+  font-size: clamp(22px, 3.4vw, 56px);
   font-weight: 800;
 }
 
@@ -304,6 +371,30 @@ body.comandos-visiveis .comandos {
 
 .resultado.erro {
   color: var(--erro);
+}
+
+.caixa-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.caixa-botoes button {
+  min-height: 48px;
+  padding: 10px 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--apagado);
+  color: var(--texto);
+  font: inherit;
+  font-size: clamp(16px, 1.6vw, 24px);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.caixa-botoes button.principal {
+  background: var(--destaque);
+  color: var(--sobre-destaque);
 }
 
 @keyframes aparecer {
@@ -319,13 +410,162 @@ body.comandos-visiveis .comandos {
   }
 }
 
-@media (max-width: 800px) {
+@media (hover: none) {
+  body:not(.comandos-visiveis) {
+    cursor: auto;
+  }
+
+  .comandos {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  kbd {
+    display: none;
+  }
+}
+
+@media (max-aspect-ratio: 1/1), (max-height: 500px) {
+  .rodape {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .comandos {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+    width: 100%;
+    padding: 8px 10px;
+    overflow-x: auto;
+    border-radius: 0;
+    box-shadow: 0 -4px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  .comandos button,
+  .comandos a {
+    flex: none;
+    min-height: 46px;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 16px;
+    white-space: nowrap;
+  }
+
+  .comandos .principal {
+    position: sticky;
+    left: 0;
+    box-shadow: 8px 0 10px -4px rgba(0, 0, 0, 0.5);
+  }
+}
+
+@media (max-height: 500px) and (min-aspect-ratio: 1/1) {
   .tela {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    padding-top: 2vh;
+  }
+
+  .coluna-da-bola {
+    gap: 1.5vh;
+  }
+
+  .bola {
+    width: min(94cqw, 44vh);
+  }
+
+  .anteriores {
+    min-height: 0;
+  }
+
+  .anteriores li {
+    width: min(17cqw, 9vh);
+  }
+
+  .contador {
+    min-height: 0;
+  }
+}
+
+@media (max-aspect-ratio: 1/1) {
+  html,
+  body {
+    height: auto;
+  }
+
+  body {
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .tela {
+    flex: 1 0 auto;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 5vw;
+    padding: 4vw 4vw 5vw;
+  }
+
+  .coluna-da-bola {
+    gap: 3vw;
+  }
+
+  .bola {
+    width: min(64cqw, 44vh);
+  }
+
+  .anteriores li {
+    width: 16cqw;
   }
 
   .painel {
+    grid-auto-rows: 8.2cqw;
+    grid-template-rows: none;
+    gap: 1.4cqw;
     height: auto;
+  }
+
+  .rodape {
+    position: sticky;
+    bottom: 0;
+    z-index: 3;
+    background: var(--superficie);
+  }
+}
+
+@media (max-width: 640px) and (max-aspect-ratio: 1/1) {
+  .painel {
+    grid-auto-rows: auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.6cqw;
+  }
+
+  .painel-faixa {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2cqw;
+  }
+
+  .painel-letra {
+    min-height: 11cqw;
+    font-size: 9cqw;
+  }
+
+  .painel-numero {
+    min-height: 10.5cqw;
+    border-radius: 1.4cqw;
+    font-size: calc(8.2cqw * var(--escala-painel));
+  }
+
+  .painel-numero.ultimo {
+    box-shadow: 0 0 0 0.9cqw var(--texto);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bola.aparecendo,
+  .painel-numero.novo {
+    animation: none;
+  }
+
+  .comandos {
+    transition: none;
   }
 }

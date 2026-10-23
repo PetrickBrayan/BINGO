@@ -3,39 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f1b2d">
   <title>Cartelas de Bingo</title>
   <link rel="stylesheet" href="css/cartelas.css">
 </head>
 <body>
-  <header class="controles">
-    <a class="botao-secundario" href="index.html">← Ir para o sorteio</a>
-
-    <label>Título da cartela
-      <input type="text" id="titulo" value="Bingo da Confraternização">
-    </label>
-
-    <label>Primeira cartela nº
-      <input type="number" id="primeira" value="1" min="1" max="9999">
-    </label>
-
-    <label>Quantidade
-      <input type="number" id="quantidade" value="40" min="1" max="500">
-    </label>
-
-    <label>Por folha
-      <select id="por-folha">
-        <option value="2">2 cartelas (A4)</option>
-        <option value="1">1 cartela grande (A4)</option>
-      </select>
-    </label>
-
-    <button type="button" id="gerar">Gerar</button>
-    <button type="button" class="botao-impressao" id="imprimir">Imprimir</button>
-
-    <p class="aviso">Cada número de cartela gera sempre a mesma cartela, e a tela do sorteio reconhece essas cartelas pelo número: na conferência, digite #12 para checar a cartela nº 12. Imprima algumas a mais para reserva.</p>
+  <header class="topo">
+    <a class="voltar" href="index.html">← Voltar ao sorteio</a>
+    <h1>Cartelas de Bingo</h1>
   </header>
 
-  <main id="folhas"></main>
+  <main class="conteudo">
+    <form class="configuracao" id="formulario" novalidate>
+      <div class="campos">
+        <label class="campo-largo">Título da cartela
+          <input type="text" id="titulo" maxlength="40" value="Bingo da Confraternização">
+        </label>
+
+        <label class="campo-largo"><span>Data e local <small>(opcional)</small></span>
+          <input type="text" id="subtitulo" maxlength="50" placeholder="exemplo: 15 de novembro · Salão da Associação">
+        </label>
+
+        <label>Primeira cartela nº
+          <input type="number" id="primeira" value="1" min="1" max="9999" inputmode="numeric">
+        </label>
+
+        <label>Quantidade de cartelas
+          <input type="number" id="quantidade" value="40" min="1" max="500" inputmode="numeric">
+        </label>
+
+        <label>Cartelas por folha
+          <select id="por-folha">
+            <option value="2">2 por folha (recomendado)</option>
+            <option value="1">1 grande por folha</option>
+          </select>
+        </label>
+
+        <label>Impressão
+          <select id="cor">
+            <option value="colorida">Colorida (igual ao telão)</option>
+            <option value="preto-e-branco">Preto e branco (economiza tinta)</option>
+          </select>
+        </label>
+
+        <label class="opcao campo-largo">
+          <input type="checkbox" id="nome">
+          Incluir linha para o nome do participante
+        </label>
+      </div>
+
+      <div class="acoes">
+        <p class="resumo" id="resumo" role="status"></p>
+        <button type="button" class="botao-impressao" id="imprimir">Imprimir cartelas</button>
+      </div>
+
+      <p class="aviso">Cada número de cartela gera sempre a mesma cartela, e a tela do sorteio reconhece essas cartelas pelo número: na conferência, digite #12 para checar a cartela nº 12. Imprima algumas a mais para reserva.</p>
+    </form>
+
+    <h2 class="previa-titulo">Prévia da impressão</h2>
+    <section class="previa" id="folhas" aria-label="Prévia das folhas"></section>
+  </main>
 
   <script src="js/gerador-cartela.js"></script>
   <script src="js/cartelas.js"></script>

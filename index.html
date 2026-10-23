@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f1b2d">
   <title>Bingo</title>
   <link rel="stylesheet" href="css/sorteio.css">
 </head>
@@ -16,19 +17,21 @@
     <section class="painel" id="painel" aria-label="Painel com os números sorteados"></section>
   </main>
 
-  <nav class="comandos" id="comandos" aria-label="Comandos do sorteio">
-    <button type="button" class="principal" data-acao="sortear">Sortear (Espaço)</button>
-    <button type="button" data-acao="repetir">Repetir voz (R)</button>
-    <button type="button" data-acao="desfazer">Desfazer (Backspace)</button>
-    <button type="button" data-acao="conferir">Conferir cartela (C)</button>
-    <a href="cartelas.html" target="_blank" rel="noopener">Cartelas</a>
-    <button type="button" data-acao="voz">Voz (M)</button>
-    <button type="button" data-acao="menos">Números − (-)</button>
-    <button type="button" data-acao="mais">Números + (+)</button>
-    <button type="button" data-acao="tema">Tema (T)</button>
-    <button type="button" data-acao="tela">Tela cheia (F)</button>
-    <button type="button" data-acao="reiniciar">Reiniciar</button>
-  </nav>
+  <footer class="rodape">
+    <nav class="comandos" id="comandos" aria-label="Comandos do sorteio">
+      <button type="button" class="principal" data-acao="sortear">Sortear <kbd>Espaço</kbd></button>
+      <button type="button" data-acao="repetir">Repetir voz <kbd>R</kbd></button>
+      <button type="button" data-acao="desfazer">Desfazer <kbd>⌫</kbd></button>
+      <button type="button" data-acao="conferir">Conferir cartela <kbd>C</kbd></button>
+      <a href="cartelas.html" target="_blank" rel="noopener">Cartelas</a>
+      <button type="button" data-acao="voz">Voz <kbd>M</kbd></button>
+      <button type="button" data-acao="menos">Números − <kbd>-</kbd></button>
+      <button type="button" data-acao="mais">Números + <kbd>+</kbd></button>
+      <button type="button" data-acao="tema">Tema <kbd>T</kbd></button>
+      <button type="button" data-acao="tela">Tela cheia <kbd>F</kbd></button>
+      <button type="button" data-acao="reiniciar">Reiniciar</button>
+    </nav>
+  </footer>
 
   <div class="sobreposicao" id="conferencia" role="dialog" aria-modal="true" aria-labelledby="conferencia-titulo" hidden>
     <div class="caixa">
@@ -36,6 +39,10 @@
       <p class="dica">Digite o número da cartela com # (exemplo: #12) ou os números separados por espaço e aperte Enter. Esc fecha.</p>
       <input type="text" id="campo-conferencia" autocomplete="off" placeholder="exemplo: #12   ou   5 12 33 47 61">
       <p class="resultado" id="resultado-conferencia" role="status"></p>
+      <div class="caixa-botoes">
+        <button type="button" class="principal" id="botao-conferir">Conferir</button>
+        <button type="button" id="botao-fechar">Fechar</button>
+      </div>
     </div>
   </div>
 
