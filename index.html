@@ -1,254 +1,45 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bingo</title>
-<style>
-:root{--bg:#0f1b2d;--fg:#ffffff;--accent:#ffc83d;--onaccent:#0f1b2d;--dim:#22334d;--dimfg:#7d8fab;--ok:#5be08a;--bad:#ff7b7b;--panel:#16263d}
-body.light{--bg:#fffdf6;--fg:#111111;--accent:#c1272d;--onaccent:#ffffff;--dim:#ebe6d8;--dimfg:#8d8776;--ok:#127a3a;--bad:#b3261e;--panel:#ffffff}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{background:var(--bg);color:var(--fg);font-family:"Segoe UI",system-ui,Arial,sans-serif;overflow:hidden}
-.app{display:grid;grid-template-columns:40% 60%;height:100vh;padding:3vh 2.5vw;gap:2.5vw}
-.left{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4vh}
-.ball{width:min(34vw,62vh);aspect-ratio:1;border-radius:50%;background:var(--accent);color:var(--onaccent);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 1.2vh var(--dim)}
-.ball .letter{font-size:min(6.5vw,11vh);font-weight:800;line-height:1;letter-spacing:.05em}
-.ball .num{font-size:min(15vw,28vh);font-weight:900;line-height:1;font-variant-numeric:tabular-nums}
-.ball .idle{font-size:min(7vw,12vh);font-weight:900;letter-spacing:.06em}
-.ball.rolling .num{opacity:.75}
-.ball.pop{animation:pop .5s ease-out}
-@keyframes pop{0%{transform:scale(.9)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
-.prev{display:flex;gap:1.2vw;min-height:7vw;align-items:center}
-.prev span{width:min(6vw,10vh);aspect-ratio:1;border-radius:50%;background:var(--dim);color:var(--fg);display:flex;align-items:center;justify-content:center;font-size:min(2.6vw,4.4vh);font-weight:800}
-.count{font-size:min(1.9vw,3.2vh);color:var(--dimfg);font-weight:600}
-.board{display:grid;grid-template-columns:1.3fr repeat(15,1fr);grid-template-rows:repeat(5,1fr);gap:.7vh .35vw;align-self:center;height:min(88vh,100%)}
-.board div{display:flex;align-items:center;justify-content:center;border-radius:.8vh;font-weight:700;font-variant-numeric:tabular-nums}
-.board .l{font-size:min(3.2vw,6vh);font-weight:900;color:var(--accent)}
-.board .c{font-size:min(1.9vw,4vh);background:var(--dim);color:var(--dimfg)}
-.board .c.on{background:var(--accent);color:var(--onaccent);font-weight:900}
-.board .c.new{animation:flash 1.2s ease-out 2}
-@keyframes flash{50%{transform:scale(1.35);box-shadow:0 0 2vh var(--accent)}}
-.bar{position:fixed;left:50%;bottom:1.5vh;transform:translateX(-50%);display:flex;gap:.6vw;padding:.8vh .8vw;background:var(--panel);border-radius:1.2vh;box-shadow:0 .5vh 2vh rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s}
-body.show .bar{opacity:1;pointer-events:auto}
-body.show{cursor:default}
-body:not(.show){cursor:none}
-.bar button{font:inherit;font-size:max(14px,1.2vw);padding:.8vh 1vw;border:0;border-radius:.8vh;background:var(--dim);color:var(--fg);cursor:pointer;font-weight:600}
-.bar button.main{background:var(--accent);color:var(--onaccent)}
-.bar button:hover{filter:brightness(1.15)}
-.ov{position:fixed;inset:0;background:rgba(0,0,0,.82);display:none;align-items:center;justify-content:center;z-index:5}
-.ov.open{display:flex}
-.box{background:var(--panel);color:var(--fg);padding:4vh 3vw;border-radius:2vh;width:min(70vw,900px);display:flex;flex-direction:column;gap:2.5vh}
-.box h2{font-size:min(3vw,5vh)}
-.box input{font:inherit;font-size:min(3vw,5vh);padding:1.2vh 1.2vw;border-radius:1vh;border:.3vh solid var(--dim);background:var(--bg);color:var(--fg)}
-.box p.hint{font-size:min(1.6vw,2.8vh);color:var(--dimfg)}
-.res{font-size:min(3.4vw,6vh);font-weight:800;min-height:1.3em}
-.res.ok{color:var(--ok)}.res.bad{color:var(--bad)}
-@media (max-width:800px){.app{grid-template-columns:1fr;grid-template-rows:auto 1fr}.board{height:auto}}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bingo</title>
+  <link rel="stylesheet" href="css/sorteio.css">
 </head>
 <body>
-<div class="app">
-  <section class="left">
-    <div class="ball" id="ball"></div>
-    <div class="prev" id="prev"></div>
-    <div class="count" id="count"></div>
-  </section>
-  <section class="board" id="board" aria-label="Números sorteados"></section>
-</div>
+  <main class="tela">
+    <section class="coluna-da-bola" aria-live="polite">
+      <div class="bola" id="bola"></div>
+      <ol class="anteriores" id="anteriores" aria-label="Últimos números sorteados"></ol>
+      <p class="contador" id="contador"></p>
+    </section>
+    <section class="painel" id="painel" aria-label="Painel com os números sorteados"></section>
+  </main>
 
-<div class="bar" id="bar">
-  <button class="main" data-a="draw">Sortear (Espaço)</button>
-  <button data-a="undo">Desfazer (Backspace)</button>
-  <button data-a="check">Conferir cartela (C)</button>
-  <button data-a="sound">Voz (M)</button>
-  <button data-a="theme">Tema (T)</button>
-  <button data-a="full">Tela cheia (F)</button>
-  <button data-a="reset">Reiniciar (R)</button>
-</div>
+  <nav class="comandos" id="comandos" aria-label="Comandos do sorteio">
+    <button type="button" class="principal" data-acao="sortear">Sortear (Espaço)</button>
+    <button type="button" data-acao="repetir">Repetir voz (R)</button>
+    <button type="button" data-acao="desfazer">Desfazer (Backspace)</button>
+    <button type="button" data-acao="conferir">Conferir cartela (C)</button>
+    <a href="cartelas.html" target="_blank" rel="noopener">Cartelas</a>
+    <button type="button" data-acao="voz">Voz (M)</button>
+    <button type="button" data-acao="menos">Números − (-)</button>
+    <button type="button" data-acao="mais">Números + (+)</button>
+    <button type="button" data-acao="tema">Tema (T)</button>
+    <button type="button" data-acao="tela">Tela cheia (F)</button>
+    <button type="button" data-acao="reiniciar">Reiniciar</button>
+  </nav>
 
-<div class="ov" id="ov">
-  <div class="box">
-    <h2>Conferir cartela</h2>
-    <p class="hint">Digite o número da cartela com # (ex.: #12) ou os números separados por espaço, e aperte Enter. Esc fecha.</p>
-    <input id="inp" autocomplete="off" placeholder="ex.: #12   ou   5 12 33 47 61">
-    <div class="res" id="res"></div>
+  <div class="sobreposicao" id="conferencia" role="dialog" aria-modal="true" aria-labelledby="conferencia-titulo" hidden>
+    <div class="caixa">
+      <h2 id="conferencia-titulo">Conferir cartela</h2>
+      <p class="dica">Digite o número da cartela com # (exemplo: #12) ou os números separados por espaço e aperte Enter. Esc fecha.</p>
+      <input type="text" id="campo-conferencia" autocomplete="off" placeholder="exemplo: #12   ou   5 12 33 47 61">
+      <p class="resultado" id="resultado-conferencia" role="status"></p>
+    </div>
   </div>
-</div>
 
-<script>
-(function(){
-var LET=['B','I','N','G','O'];
-var SAY=['Bê','I','Ene','Gê','Ó'];
-var W=['zero','um','dois','três','quatro','cinco','seis','sete','oito','nove'];
-var drawn=[],busy=false,sound=true,timer=null,hideT=null;
-try{drawn=JSON.parse(localStorage.getItem('bingo-v1')||'[]').filter(function(n){return n>=1&&n<=75})}catch(e){}
-try{sound=localStorage.getItem('bingo-sound')!=='off'}catch(e){}
-try{if(localStorage.getItem('bingo-theme')==='light')document.body.classList.add('light')}catch(e){}
-
-var $=function(id){return document.getElementById(id)};
-var ball=$('ball'),prev=$('prev'),count=$('count'),board=$('board'),ov=$('ov'),inp=$('inp'),res=$('res');
-
-function li(n){return Math.floor((n-1)/15)}
-function save(){try{localStorage.setItem('bingo-v1',JSON.stringify(drawn))}catch(e){}}
-function rnd(n){var a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}
-
-
-for(var r=0;r<5;r++){
-  var h=document.createElement('div');h.className='l';h.textContent=LET[r];board.appendChild(h);
-  for(var k=1;k<=15;k++){var n=r*15+k;var c=document.createElement('div');c.className='c';c.id='c'+n;c.textContent=n;board.appendChild(c)}
-}
-
-function showBall(n){
-  if(n){ball.innerHTML='<div class="letter">'+LET[li(n)]+'</div><div class="num">'+n+'</div>'}
-  else if(drawn.length>=75){ball.innerHTML='<div class="idle">FIM</div>'}
-  else{ball.innerHTML='<div class="idle">BINGO</div>'}
-}
-function render(newN){
-  for(var n=1;n<=75;n++){var e=$('c'+n);e.className='c'+(drawn.indexOf(n)>-1?' on':'')+(n===newN?' new':'')}
-  var last=drawn[drawn.length-1];
-  if(!busy)showBall(last);
-  prev.innerHTML='';
-  drawn.slice(-6,-1).reverse().forEach(function(n){var s=document.createElement('span');s.textContent=n;prev.appendChild(s)});
-  count.textContent=drawn.length?drawn.length+' de 75 sorteados':'';
-}
-function speak(n){
-  if(!sound||!('speechSynthesis' in window))return;
-  try{
-    speechSynthesis.cancel();
-    var t=SAY[li(n)]+'. '+n+'.';
-    if(n>=10)t+=' '+W[Math.floor(n/10)]+' e '+W[n%10]+'.';
-    var u=new SpeechSynthesisUtterance(t);u.lang='pt-BR';u.rate=.8;speechSynthesis.speak(u);
-  }catch(e){}
-}
-function draw(){
-  if(busy)return;
-  var rem=[];for(var n=1;n<=75;n++)if(drawn.indexOf(n)<0)rem.push(n);
-  if(!rem.length){showBall(0);return}
-  var pick=rem[rnd(rem.length)];
-  busy=true;ball.classList.add('rolling');
-  var t0=Date.now();
-  timer=setInterval(function(){
-    var f=rem[rnd(rem.length)];
-    ball.innerHTML='<div class="letter">'+LET[li(f)]+'</div><div class="num">'+f+'</div>';
-    if(Date.now()-t0>1100){
-      clearInterval(timer);busy=false;ball.classList.remove('rolling');
-      drawn.push(pick);save();render(pick);
-      ball.classList.remove('pop');void ball.offsetWidth;ball.classList.add('pop');
-      speak(pick);
-    }
-  },70);
-}
-function undo(){
-  if(busy||!drawn.length)return;
-  drawn.pop();save();render();
-}
-function reset(){
-  if(busy)return;
-  if(confirm('Reiniciar o bingo? Todos os números sorteados serão apagados.')){drawn=[];save();render();try{speechSynthesis.cancel()}catch(e){}}
-}
-function toggleSound(){
-  sound=!sound;try{localStorage.setItem('bingo-sound',sound?'on':'off')}catch(e){}
-  if(!sound){try{speechSynthesis.cancel()}catch(e){}}
-  flash('Voz '+(sound?'ligada':'desligada'));
-}
-function toggleTheme(){
-  document.body.classList.toggle('light');
-  try{localStorage.setItem('bingo-theme',document.body.classList.contains('light')?'light':'dark')}catch(e){}
-}
-function full(){
-  if(document.fullscreenElement){document.exitFullscreen()}
-  else if(document.documentElement.requestFullscreen){document.documentElement.requestFullscreen()}
-}
-function flash(msg){count.textContent=msg;setTimeout(function(){render()},1500)}
-function openCheck(){ov.classList.add('open');inp.value='';res.textContent='';res.className='res';setTimeout(function(){inp.focus()},50)}
-function closeCheck(){ov.classList.remove('open');inp.blur()}
-
-function mb(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function cardFor(id){
-  var r=mb((Math.imul(id,2654435761)^0x9E3779B9)>>>0);
-  for(var w=0;w<8;w++)r();
-  var cols=[];
-  for(var c=0;c<5;c++){
-    var p=[];for(var k=1;k<=15;k++)p.push(c*15+k);
-    for(var i=14;i>0;i--){var j=Math.floor(r()*(i+1));var t=p[i];p[i]=p[j];p[j]=t}
-    var s=p.slice(0,c===2?4:5).sort(function(a,b){return a-b});
-    if(c===2)s.splice(2,0,0);
-    cols.push(s);
-  }
-  var rows=[];
-  for(var y=0;y<5;y++){rows.push([]);for(var x=0;x<5;x++)rows[y].push(cols[x][y])}
-  return rows;
-}
-
-function checkCard(id){
-  if(id<1||id>9999){res.className='res bad';res.textContent='✖ Cartela inválida';return}
-  var g=cardFor(id);
-  var mk=function(n){return n===0||drawn.indexOf(n)>-1};
-  var miss=[];
-  g.forEach(function(row){row.forEach(function(n){if(!mk(n))miss.push(n)})});
-  var lines=[],i;
-  for(i=0;i<5;i++){lines.push(g[i]);lines.push(g.map(function(r){return r[i]}))}
-  lines.push([0,1,2,3,4].map(function(k){return g[k][k]}));
-  lines.push([0,1,2,3,4].map(function(k){return g[k][4-k]}));
-  var line=lines.some(function(l){return l.every(mk)});
-  var head='Cartela nº '+id+': ';
-  if(!miss.length){res.className='res ok';res.textContent='✔ '+head+'CARTELA CHEIA!'}
-  else if(line){res.className='res ok';res.textContent='✔ '+head+'tem LINHA completa (faltam '+miss.length+' p/ cheia)'}
-  else{
-    res.className='res bad';
-    res.textContent='✖ '+head+'faltam '+miss.length+(miss.length<=5?': '+miss.sort(function(a,b){return a-b}).join(', '):' números');
-  }
-}
-function check(){
-  var cm=inp.value.match(/^\s*#\s*(\d+)\s*$/);
-  if(cm){checkCard(parseInt(cm[1],10));return}
-  var m=(inp.value.match(/\d+/g)||[]).map(Number).filter(function(n,i,a){return a.indexOf(n)===i});
-  if(!m.length){res.textContent='';res.className='res';return}
-  var bad=m.filter(function(n){return n<1||n>75});
-  var miss=m.filter(function(n){return n>=1&&n<=75&&drawn.indexOf(n)<0}).sort(function(a,b){return a-b});
-  if(bad.length){res.className='res bad';res.textContent='✖ Número inválido: '+bad.join(', ')}
-  else if(miss.length){res.className='res bad';res.textContent='✖ Ainda não saíram: '+miss.join(', ')}
-  else{res.className='res ok';res.textContent='✔ Todos os '+m.length+' números já saíram!'}
-}
-function act(a){
-  ({draw:draw,undo:undo,check:openCheck,sound:toggleSound,theme:toggleTheme,full:full,reset:reset})[a]();
-}
-
-document.addEventListener('keydown',function(e){
-  if(ov.classList.contains('open')){
-    if(e.key==='Escape'){closeCheck()}
-    else if(e.key==='Enter'){check()}
-    return;
-  }
-  var k=e.key.toLowerCase();
-  if(k===' '||k==='enter'){e.preventDefault();if(document.activeElement&&document.activeElement.blur)document.activeElement.blur();draw()}
-  else if(k==='backspace'){undo()}
-  else if(k==='c'){e.preventDefault();openCheck()}
-  else if(k==='m'){toggleSound()}
-  else if(k==='t'){toggleTheme()}
-  else if(k==='f'){full()}
-  else if(k==='r'){reset()}
-  askWake();
-});
-$('bar').addEventListener('click',function(e){var b=e.target.closest('button');if(b){b.blur();act(b.getAttribute('data-a'))}askWake()});
-ov.addEventListener('click',function(e){if(e.target===ov)closeCheck()});
-
-
-function showUI(){document.body.classList.add('show');clearTimeout(hideT);hideT=setTimeout(function(){document.body.classList.remove('show')},3000)}
-document.addEventListener('mousemove',showUI);
-document.addEventListener('touchstart',showUI);
-
-
-var wl=null;
-function askWake(){
-  if(wl||!navigator.wakeLock)return;
-  navigator.wakeLock.request('screen').then(function(l){wl=l;l.addEventListener('release',function(){wl=null})}).catch(function(){});
-}
-document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')askWake()});
-
-render();showUI();
-})();
-</script>
+  <script src="js/gerador-cartela.js"></script>
+  <script src="js/sorteio.js"></script>
 </body>
 </html>

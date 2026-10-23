@@ -1,0 +1,210 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #d9dde3;
+  color: #000000;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 14px;
+  max-width: 900px;
+  margin: 16px auto;
+  padding: 16px 20px;
+  border-radius: 10px;
+  background: #ffffff;
+  font-size: 16px;
+}
+
+.controles label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 600;
+}
+
+.controles input,
+.controles select {
+  padding: 8px 10px;
+  border: 1px solid #999999;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.controles input[type="text"] {
+  width: 320px;
+}
+
+.controles input[type="number"] {
+  width: 110px;
+}
+
+.controles button,
+.botao-secundario {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 6px;
+  background: #0f1b2d;
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.controles .botao-secundario {
+  background: #e6e9ee;
+  color: #0f1b2d;
+}
+
+.controles .botao-impressao {
+  background: #c1272d;
+}
+
+.aviso {
+  flex-basis: 100%;
+  color: #444444;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.folha {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 210mm;
+  height: 296mm;
+  margin: 10px auto;
+  padding: 8mm 14mm;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+  break-after: page;
+}
+
+.folha:last-child {
+  break-after: auto;
+}
+
+.corte {
+  border: 0;
+  border-top: 0.4mm dashed #888888;
+}
+
+.cartela {
+  display: flex;
+  flex-direction: column;
+  height: 134mm;
+  padding: 4mm;
+  border: 1.2mm solid #000000;
+}
+
+.titulo {
+  margin-bottom: 2mm;
+  font-size: 6.5mm;
+  font-weight: 700;
+  text-align: center;
+}
+
+.grade {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: 15mm repeat(5, 1fr);
+  gap: 1.2mm;
+}
+
+.letra,
+.casa {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.5mm;
+}
+
+.letra {
+  background: #000000;
+  color: #ffffff;
+  font-size: 11mm;
+  font-weight: 900;
+}
+
+.casa {
+  border: 0.8mm solid #000000;
+  font-size: 13mm;
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.casa.livre {
+  background: #e3e3e3;
+  font-size: 6mm;
+}
+
+.rodape {
+  margin-top: 2mm;
+  font-size: 8mm;
+  font-weight: 700;
+  text-align: center;
+}
+
+.uma-por-folha .cartela {
+  height: 280mm;
+  padding: 6mm;
+}
+
+.uma-por-folha .titulo {
+  margin-bottom: 4mm;
+  font-size: 10mm;
+}
+
+.uma-por-folha .grade {
+  grid-template-rows: 28mm repeat(5, 1fr);
+  gap: 2.5mm;
+}
+
+.uma-por-folha .letra {
+  font-size: 22mm;
+}
+
+.uma-por-folha .casa {
+  border-width: 1.2mm;
+  font-size: 32mm;
+}
+
+.uma-por-folha .casa.livre {
+  font-size: 12mm;
+}
+
+.uma-por-folha .rodape {
+  margin-top: 4mm;
+  font-size: 14mm;
+}
+
+@media print {
+  body {
+    background: #ffffff;
+  }
+
+  .controles {
+    display: none;
+  }
+
+  .folha {
+    margin: 0;
+    box-shadow: none;
+  }
+}

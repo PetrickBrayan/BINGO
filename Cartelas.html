@@ -1,121 +1,43 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Cartelas de Bingo</title>
-<style>
-@page{size:A4;margin:0}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:#d9dde3;color:#000}
-.ctl{max-width:900px;margin:16px auto;padding:16px 20px;background:#fff;border-radius:10px;display:flex;flex-wrap:wrap;gap:14px;align-items:end;font-size:16px}
-.ctl label{display:flex;flex-direction:column;gap:4px;font-weight:600}
-.ctl input,.ctl select{font:inherit;padding:8px 10px;border:1px solid #999;border-radius:6px}
-.ctl input[type=text]{width:320px}
-.ctl input[type=number]{width:110px}
-.ctl button{font:inherit;font-weight:700;padding:10px 18px;border:0;border-radius:6px;background:#0f1b2d;color:#fff;cursor:pointer}
-.ctl button.sec{background:#c1272d}
-.ctl p{flex-basis:100%;font-size:14px;color:#444;line-height:1.4}
-.page{width:210mm;height:297mm;margin:10px auto;background:#fff;padding:8mm 14mm;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 2px 10px rgba(0,0,0,.25);break-after:page;page-break-after:always;overflow:hidden}
-.card{height:134mm;border:1.2mm solid #000;display:flex;flex-direction:column;padding:4mm}
-.cut{border-top:.4mm dashed #888}
-.title{text-align:center;font-size:6.5mm;font-weight:700;margin-bottom:2mm}
-.grid{flex:1;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:15mm repeat(5,1fr);gap:1.2mm}
-.h{display:flex;align-items:center;justify-content:center;font-size:11mm;font-weight:900;background:#000;color:#fff;border-radius:1.5mm}
-.n{display:flex;align-items:center;justify-content:center;border:.8mm solid #000;border-radius:1.5mm;font-size:13mm;line-height:1;font-weight:800;font-variant-numeric:tabular-nums}
-.n.free{font-size:6mm;background:#e3e3e3}
-.foot{text-align:center;font-size:8mm;font-weight:700;margin-top:2mm}
-.one .card{height:281mm;padding:6mm}
-.one .title{font-size:10mm;margin-bottom:4mm}
-.one .grid{grid-template-rows:28mm repeat(5,1fr);gap:2.5mm}
-.one .h{font-size:22mm}
-.one .n{font-size:32mm;border-width:1.2mm}
-.one .n.free{font-size:12mm}
-.one .foot{font-size:14mm;margin-top:4mm}
-@media print{
-  body{background:#fff}
-  .ctl{display:none}
-  .page{margin:0;box-shadow:none}
-}
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cartelas de Bingo</title>
+  <link rel="stylesheet" href="css/cartelas.css">
 </head>
 <body>
-<div class="ctl">
-  <label>Título da cartela
-    <input type="text" id="title" value="Bingo da Confraternização">
-  </label>
-  <label>Primeira cartela nº
-    <input type="number" id="start" value="1" min="1" max="9999">
-  </label>
-  <label>Quantidade
-    <input type="number" id="qty" value="40" min="1" max="500">
-  </label>
-  <label>Por folha
-    <select id="per">
-      <option value="2">2 cartelas (A4)</option>
-      <option value="1">1 cartela grande (A4)</option>
-    </select>
-  </label>
-  <button id="gen">Gerar</button>
-  <button id="print" class="sec">Imprimir</button>
-  <p>Cada número de cartela gera sempre a mesma cartela, e o arquivo do sorteio (index.html) reconhece essas cartelas pelo número: na conferência, digite <b>#12</b> para checar a cartela nº 12. Imprima algumas a mais para reserva e use, no sorteio, o mesmo conjunto de arquivos que você gerou aqui.</p>
-</div>
-<div id="out"></div>
+  <header class="controles">
+    <a class="botao-secundario" href="index.html">← Ir para o sorteio</a>
 
-<script>
+    <label>Título da cartela
+      <input type="text" id="titulo" value="Bingo da Confraternização">
+    </label>
 
-function mb(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function cardFor(id){
-  var r=mb((Math.imul(id,2654435761)^0x9E3779B9)>>>0);
-  for(var w=0;w<8;w++)r();
-  var cols=[];
-  for(var c=0;c<5;c++){
-    var p=[];for(var k=1;k<=15;k++)p.push(c*15+k);
-    for(var i=14;i>0;i--){var j=Math.floor(r()*(i+1));var t=p[i];p[i]=p[j];p[j]=t}
-    var s=p.slice(0,c===2?4:5).sort(function(a,b){return a-b});
-    if(c===2)s.splice(2,0,0);
-    cols.push(s);
-  }
-  var rows=[];
-  for(var y=0;y<5;y++){rows.push([]);for(var x=0;x<5;x++)rows[y].push(cols[x][y])}
-  return rows;
-}
+    <label>Primeira cartela nº
+      <input type="number" id="primeira" value="1" min="1" max="9999">
+    </label>
 
+    <label>Quantidade
+      <input type="number" id="quantidade" value="40" min="1" max="500">
+    </label>
 
-(function(){
-var $=function(id){return document.getElementById(id)};
-function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-function pad(n){return String(n).padStart(3,'0')}
-function cardHTML(id,title){
-  var g=cardFor(id);
-  var h='<div class="card"><div class="title">'+esc(title)+'</div><div class="grid">';
-  'BINGO'.split('').forEach(function(l){h+='<div class="h">'+l+'</div>'});
-  g.forEach(function(row){row.forEach(function(n){
-    h+=n===0?'<div class="n free">LIVRE</div>':'<div class="n">'+n+'</div>';
-  })});
-  h+='</div><div class="foot">Cartela nº '+pad(id)+'</div></div>';
-  return h;
-}
-function clamp(v,a,b,d){v=parseInt(v,10);if(isNaN(v))v=d;return Math.max(a,Math.min(b,v))}
-function generate(){
-  var title=$('title').value||'Bingo';
-  var start=clamp($('start').value,1,9999,1);
-  var qty=clamp($('qty').value,1,500,40);
-  var per=$('per').value==='1'?1:2;
-  $('start').value=start;$('qty').value=qty;
-  document.body.className=per===1?'one':'';
-  var out='';
-  for(var i=0;i<qty;i+=per){
-    out+='<div class="page">'+cardHTML(start+i,title);
-    if(per===2&&i+1<qty)out+='<div class="cut"></div>'+cardHTML(start+i+1,title);
-    out+='</div>';
-  }
-  $('out').innerHTML=out;
-}
-$('gen').addEventListener('click',generate);
-$('print').addEventListener('click',function(){generate();window.print()});
-generate();
-})();
-</script>
+    <label>Por folha
+      <select id="por-folha">
+        <option value="2">2 cartelas (A4)</option>
+        <option value="1">1 cartela grande (A4)</option>
+      </select>
+    </label>
+
+    <button type="button" id="gerar">Gerar</button>
+    <button type="button" class="botao-impressao" id="imprimir">Imprimir</button>
+
+    <p class="aviso">Cada número de cartela gera sempre a mesma cartela, e a tela do sorteio reconhece essas cartelas pelo número: na conferência, digite #12 para checar a cartela nº 12. Imprima algumas a mais para reserva.</p>
+  </header>
+
+  <main id="folhas"></main>
+
+  <script src="js/gerador-cartela.js"></script>
+  <script src="js/cartelas.js"></script>
 </body>
 </html>
